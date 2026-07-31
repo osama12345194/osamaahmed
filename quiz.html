@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>الاختبار الإلكتروني مع التفسير العلمي - منصة ملك الأحياء</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .quiz-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .quiz-header h2 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 20px;
+        }
+        .timer-box {
+            background-color: #21262d;
+            border: 1px solid #ffc107;
+            color: #ffc107;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .question-status {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .question-block {
+            display: none;
+            text-align: right;
+        }
+        .question-block.active {
+            display: block;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+        .option-item {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 14px 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .option-item:hover {
+            border-color: #ffc107;
+            background-color: #1f242c;
+        }
+        .option-item input {
+            margin-left: 12px;
+            cursor: pointer;
+            accent-color: #ffc107;
+        }
+        .controls-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid #30363d;
+            padding-top: 20px;
+        }
+        .btn-nav {
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            padding: 10px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-nav:hover:not(:disabled) {
+            border-color: #ffc107;
+            color: #ffffff;
+        }
+        .btn-nav:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .btn-finish {
+            background-color: #ffc107;
+            color: #0d1117;
+            border: none;
+            padding: 10px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+        }
+        
+        /* شاشة النتيجة والتحليل المتقدم */
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #21262d;
+            border: 4px solid #56d364;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 20px auto;
+        }
+        .explanation-card {
+            text-align: right;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .explanation-text {
+            background-color: #0d1117;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #e6edf3;
+            line-height: 1.6;
+        }
+        .badge-status {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .badge-success { background-color: rgba(86, 211, 100, 0.15); color: #56d364; }
+        .badge-danger { background-color: rgba(248, 81, 73, 0.15); color: #f85149; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- الهيدر والتايمر -->
+        <div class="quiz-header" id="quiz-header">
+            <h2>اختبار الدعامة النباتية والتركيبية 🧬</h2>
+            <div class="timer-box">الوقت المتبقي: <span id="timer">30:00</span></div>
+        </div>
+
+        <div class="question-status" id="question-counter">السؤال 1 من 3</div>
+
+        <!-- منطقة الأسئلة -->
+        <form id="quizForm" onsubmit="finishQuiz(event)">
+            
+            <!-- السؤال الأول -->
+            <div class="question-block active" id="qBlock-0">
+                <div class="question-text">س١: أي مما يلي يمثل الدعامة التركيبية في النبات بشكل أساسي؟</div>
+                <ul class="options-list">
+                    <li class="option-item"><input type="radio" name="q1" value="wrong1" id="q1_1" required><label for="q1_1">انتفاخ الخلايا عند الري بالماء</label></li>
+                    <li class="option-item"><input type="radio" name="q1" value="correct" id="q1_2"><label for="q1_2">ترسيب مادة السليلوز أو اللجنين على الجدر الخلوية</label></li>
+                    <li class="option-item"><input type="radio" name="q1" value="wrong2" id="q1_3"><label for="q1_3">زيادة تركيز الفجوة العصاريرة</label></li>
+                </ul>
+            </div>
+
+            <!-- السؤال الثاني -->
+            <div class="question-block" id="qBlock-1">
+                <div class="question-text">س٢: ما النسيج النباتي الذي يكتسب دعامة تركيبية فقط ولا يتأثر بالدعامة الفسيولوجية؟</div>
+                <ul class="options-list">
+                    <li class="option-item"><input type="radio" name="q2" value="wrong1" id="q2_1" required><label for="q2_1">النسيج البارانشيمي</label></li>
+                    <li class="option-item"><input type="radio" name="q2" value="correct" id="q2_2"><label for="q2_2">النسيج الإسكلرانشيمي (الخلايا الحجرية)</label></li>
+                    <li class="option-item"><input type="radio" name="q2" value="wrong2" id="q2_3"><label for="q2_3">النسيج الكولانشيمي</label></li>
+                </ul>
+            </div>
+
+            <!-- السؤال الثالث -->
+            <div class="question-block" id="qBlock-2">
+                <div class="question-text">س٣: عندما تذبل الثمار العشبية وتكرمش، فهذا يدل على فقدها للدعامة:</div>
+                <ul class="options-list">
+                    <li class="option-item"><input type="radio" name="q3" value="correct" id="q3_1" required><label for="q3_1">الفسيولوجية نتيجة فقد الماء</label></li>
+                    <li class="option-item"><input type="radio" name="q3" value="wrong1" id="q3_2"><label for="q3_2">التركيبية فقط</label></li>
+                    <li class="option-item"><input type="radio" name="q3" value="wrong2" id="q3_3"><label for="q3_3">التركيبية والفسيولوجية معاً</label></li>
+                </ul>
+            </div>
+
+            <div class="controls-nav" id="controls-nav">
+                <button type="button" class="btn-nav" id="btn-prev" onclick="changeQuestion(-1)" disabled>السابق</button>
+                <button type="button" class="btn-nav" id="btn-next" onclick="changeQuestion(1)">التالي</button>
+                <button type="submit" class="btn-finish" id="btn-finish">إنهاء الاختبار 🏁</button>
+            </div>
+        </form>
+
+        <!-- شاشة التحليل والتفسير العلمي المفصل -->
+        <div class="result-screen" id="result-screen">
+            <h2>📊 النتيجة والتحليل التفصيلي</h2>
+            <div class="score-circle" id="score-text">0 / 3</div>
+            <p id="feedback-text" style="font-size: 16px; font-weight: bold; color: #ffc107; margin-bottom: 30px;"></p>
+            
+            <div style="text-align: right; margin-bottom: 20px;">
+                <h3 style="color: #fff; border-bottom: 1px solid #30363d; padding-bottom: 8px;">💡 تفسير الإجابات والتحليل العلمي:</h3>
+            </div>
+
+            <!-- تفسير السؤال الأول -->
+            <div class="explanation-card">
+                <h4>س١: أي مما يلي يمثل الدعامة التركيبية في النبات بشكل أساسي؟</h4>
+                <div id="status-q1"></div>
+                <p>🔹 الإجابة الصحيحة: <strong>ترسيب مادة السليلوز أو اللجنين على الجدر الخلوية</strong></p>
+                <div class="explanation-text">
+                    <strong>الشرح والتحليل:</strong> الدعامة التركيبية هي دعامة دائمة تعتمد على ترسيب مواد صلبة وقوية على جدر الخلايا لحمايتها ومنع فقد الماء. أما انتفاخ الخلايا وزيادة تركيز الفجوة العصاريرة فهي خواص أسموزية مؤقتة تتبع الدعامة الفسيولوجية وليست التركيبية.
+                </div>
+            </div>
+
+            <!-- تفسير السؤال الثاني -->
+            <div class="explanation-card">
+                <h4>س٢: ما النسيج النباتي الذي يكتسب دعامة تركيبية فقط ولا يتأثر بالدعامة الفسيولوجية؟</h4>
+                <div id="status-q2"></div>
+                <p>🔹 الإجابة الصحيحة: <strong>النسيج الإسكلرانشيمي (الخلايا الحجرية)</strong></p>
+                <div class="explanation-text">
+                    <strong>الشرح والتحليل:</strong> النسيج الإسكلرانشيمي يتكون من خلايا ميتة مغلظة تماماً بمادة اللجنين الصلبة، وبما أنها خلايا ميتة فلا تحتوي على بروتوبلازم أو فجوة عصارية لامتصاص الماء، لذلك يمتلك دعامة تركيبية فقط. بينما البارانشيمي يمتلك فسيولوجية فقط، والكولانشيمي يجمع بين الإثنين معاً.
+                </div>
+            </div>
+
+            <!-- تفسير السؤال الثالث -->
+            <div class="explanation-card">
+                <h4>س٣: عندما تذبل الثمار العشبية وتكرمش، فهذا يدل على فقدها للدعامة:</h4>
+                <div id="status-q3"></div>
+                <p>🔹 الإجابة الصحيحة: <strong>الفسيولوجية نتيجة فقد الماء</strong></p>
+                <div class="explanation-text">
+                    <strong>الشرح والتحليل:</strong> كرمشة الثمار وارتخاء النباتات العشبية يعود بشكل مباشر إلى فقد خلاياها للماء، مما يؤدي إلى زوال ضغط الامتلاء وتوتر الجدار الخلوي، وهي الخاصية المميزة للدعامة الفسيولوجية (المؤقتة). الدعامة التركيبية لا تضيع بمجرد فقد الماء لأنها مواد مرسبة ثابتة.
+                </div>
+            </div>
+
+            <a href="course-details.html" class="btn-nav" style="background-color: #ffc107; color: #0d1117; text-decoration: none; padding: 12px 35px; display: inline-block; margin-top: 15px; border: none;">العودة للمحاضرات 🔓</a>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const totalQuestions = 3;
+
+        function changeQuestion(direction) {
+            document.getElementById(`qBlock-${currentQuestion}`).classList.remove('active');
+            currentQuestion += direction;
+            document.getElementById(`qBlock-${currentQuestion}`).classList.add('active');
+            
+            document.getElementById('question-counter').textContent = `السؤال ${currentQuestion + 1} من ${totalQuestions}`;
+            document.getElementById('btn-prev').disabled = (currentQuestion === 0);
+            
+            if (currentQuestion === totalQuestions - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-finish').style.display = 'block';
+            } else {
+                document.getElementById('btn-next').style.display = 'block';
+                document.getElementById('btn-finish').style.display = 'none';
+            }
+        }
+
+        let time = 30 * 60;
+        const countdown = setInterval(() => {
+            let minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+            if (time > 0) time--;
+            else { clearInterval(countdown); finishQuiz(new Event('submit')); }
+        }, 1000);
+
+        function finishQuiz(event) {
+            event.preventDefault();
+            clearInterval(countdown);
+
+            let score = 0;
+            const ans1 = document.querySelector('input[name="q1"]:checked').value;
+            const ans2 = document.querySelector('input[name="q2"]:checked').value;
+            const ans3 = document.querySelector('input[name="q3"]:checked').value;
+
+            if (ans1 === 'correct') { score++; document.getElementById('status-q1').innerHTML = '<span class="badge-status badge-success">إجابتك صحيحة ✓</span>'; }
+            else { document.getElementById('status-q1').innerHTML = '<span class="badge-status badge-danger">إجابتك خاطئة ✗</span>'; }
+
+            if (ans2 === 'correct') { score++; document.getElementById('status-q2').innerHTML = '<span class="badge-status badge-success">إجابتك صحيحة ✓</span>'; }
+            else { document.getElementById('status-q2').innerHTML = '<span class="badge-status badge-danger">إجابتك خاطئة ✗</span>'; }
+
+            if (ans3 === 'correct') { score++; document.getElementById('status-q3').innerHTML = '<span class="badge-status badge-success">إجابتك صحيحة ✓</span>'; }
+            else { document.getElementById('status-q3').innerHTML = '<span class="badge-status badge-danger">إجابتك خاطئة ✗</span>'; }
+
+            document.getElementById('quizForm').style.display = 'none';
+            document.getElementById('quiz-header').style.display = 'none';
+            document.getElementById('question-counter').style.display = 'none';
+
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('score-text').textContent = `${score} / 3`;
+
+            if (score >= 2) {
+                localStorage.setItem('passedQuiz1', 'true');
+                document.getElementById('feedback-text').textContent = "ممتاز يا دكتور! نجحت في الامتحان وتم فتح المحاضرة التالية. 🎯";
+                document.getElementById('feedback-text').style.color = "#56d364";
+            } else {
+                document.getElementById('feedback-text').textContent = "لم تجتز الاختبار (تحتاج 2 من 3 على الأقل). راجع الشرح والتحليل أدناه ثم أعد المحاولة!";
+                document.getElementById('feedback-text').style.color = "#f85149";
+            }
+        }
+    </script>
+</body>
+</html>

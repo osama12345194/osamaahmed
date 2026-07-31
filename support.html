@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني - منصة أسامة</title>
+    <style>
+        :root {
+            --bg-color: #0d1117; --card-bg: #161b22; --text-color: #c9d1d9;
+            --accent-color: #ffc107; --border-color: #30363d; --hover-bg: #21262d;
+        }
+        body.light-mode {
+            --bg-color: #f6f8fa; --card-bg: #ffffff; --text-color: #24292f;
+            --border-color: #d0d7de; --hover-bg: #f3f4f6;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; margin: 0; padding-top: 90px; }
+        
+        .navbar {
+            position: fixed; top: 0; right: 0; left: 0; height: 75px;
+            background-color: var(--card-bg); border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 35px; z-index: 1000;
+        }
+        .logo-area { display: flex; align-items: center; gap: 20px; }
+        .logo-text { color: #ff5722; font-weight: bold; font-size: 24px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .home-link-btn {
+            background: var(--hover-bg); border: 1px solid var(--border-color); color: var(--text-color);
+            padding: 0 14px; height: 40px; border-radius: 20px; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s;
+        }
+        .home-link-btn:hover { color: var(--accent-color); border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
+        .nav-right { display: flex; align-items: center; gap: 18px; }
+        .icon-btn { background: var(--hover-bg); border: 1px solid var(--border-color); color: var(--text-color); font-size: 16px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s; }
+        .icon-btn:hover { color: var(--accent-color); border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
+        .wallet-btn { background: var(--hover-bg); border: 1px solid var(--border-color); color: var(--accent-color); padding: 0 14px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .wallet-btn:hover { border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
+        
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; left: 0; background-color: var(--card-bg); min-width: 260px; border: 1px solid var(--border-color); border-radius: 14px; z-index: 1001; margin-top: 12px; }
+        .dropdown-content.show { display: block; }
+        .dropdown-content a { color: var(--text-color); padding: 13px 18px; text-decoration: none; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); font-size: 14px; transition: 0.2s; }
+        .dropdown-content a:last-child { border-bottom: none; color: #ff5252; }
+        .dropdown-content a:hover { background-color: var(--hover-bg); color: var(--accent-color); padding-right: 23px; }
+
+        .main-container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        
+        .support-card {
+            background-color: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 30px; margin-bottom: 25px; transition: 0.2s;
+        }
+        .support-card:hover { border-color: rgba(255, 193, 7, 0.4); }
+        .support-card h2 { margin-top: 0; color: var(--accent-color); font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        
+        .telegram-banner {
+            background: linear-gradient(135deg, #0088cc, #229ed9); color: #fff; padding: 20px;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;
+        }
+        .telegram-banner div h3 { margin: 0 0 5px 0; font-size: 18px; }
+        .telegram-banner div p { margin: 0; font-size: 13px; opacity: 0.9; }
+        .tg-btn {
+            background: #fff; color: #0088cc; padding: 10px 20px; border-radius: 8px; text-decoration: none;
+            font-weight: bold; font-size: 14px; transition: 0.2s; white-space: nowrap;
+        }
+        .tg-btn:hover { background: #f0f0f0; transform: scale(1.05); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-color); }
+        .form-control {
+            width: 100%; background-color: var(--hover-bg); border: 1px solid var(--border-color);
+            color: var(--text-color); padding: 12px 15px; border-radius: 10px; font-size: 14px; box-sizing: border-box; transition: 0.2s;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 8px rgba(255, 193, 7, 0.2); }
+        textarea.form-control { resize: vertical; height: 120px; }
+
+        .submit-btn {
+            background-color: var(--accent-color); color: #000; border: none; padding: 12px 25px;
+            border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.2s;
+        }
+        .submit-btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); }
+
+        .faq-item { background: var(--hover-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; margin-bottom: 12px; }
+        .faq-item h4 { margin: 0 0 6px 0; color: var(--accent-color); font-size: 15px; }
+        .faq-item p { margin: 0; font-size: 13px; color: #8b949e; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo-area">
+            <a href="dashboard.html" class="logo-text"><span>🧬</span> منصة أسامة</a>
+            <a href="dashboard.html" class="home-link-btn" title="الصفحة الرئيسية"><span>🏠</span><span>الرئيسية</span></a>
+            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+        <div class="nav-right">
+            <a href="wallet.html" class="wallet-btn"><span>💳</span><span>المحفظة</span><span>+</span></a>
+            <a href="support.html" class="icon-btn" title="الدعم الفني">📞</a>
+            <a href="profile.html" class="icon-btn">👤</a>
+            <div class="dropdown">
+                <button class="icon-btn" onclick="toggleMenu(event)">☰</button>
+                <div class="dropdown-content" id="dropdownMenu">
+                    <a href="profile.html">👤 البيانات والصورة الشخصية</a>
+                    <a href="grades.html">📊 تحليل وحل درجات الواجب والاختبارات</a>
+                    <a href="my-courses.html">📚 كورساتي</a>
+                    <a href="available-courses.html">🌟 الكورسات المتاحة</a>
+                    <a href="wallet.html">💳 شحن المحفظة</a>
+                    <a href="support.html">🛠️ الدعم الفني</a>
+                    <a href="#" onclick="logout()">🚪 تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- التواصل السريع تليجرام -->
+        <div class="telegram-banner">
+            <div>
+                <h3>💬 محتاج مساعدة عاجلة عبر تليجرام؟</h3>
+                <p>فريق الدعم الفني وقناة المنصة متواجدين لخدمتك طوال اليوم.</p>
+            </div>
+            <a href="https://t.me/your_telegram_username" target="_blank" class="tg-btn">تواصل عبر تليجرام</a>
+        </div>
+
+        <div class="support-card">
+            <h2><span>📩</span> أرسل رسالة أو استفسار لفريق الدعم</h2>
+            <form onsubmit="submitSupport(event)">
+                <div class="form-group">
+                    <label>عنوان المشكلة أو الاستفسار</label>
+                    <input type="text" id="supSubject" class="form-control" placeholder="مثال: مشكلة في تشغيل فيديو المحاضرة الأولى" required>
+                </div>
+                <div class="form-group">
+                    <label>تفاصيل الرسالة</label>
+                    <textarea id="supMessage" class="form-control" placeholder="اكتب تفاصيل المشكلة بوضوح وسنقوم بالرد عليك في أقرب وقت..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">إرسال الرسالة</button>
+            </form>
+        </div>
+
+        <div class="support-card">
+            <h2><span>❓</span> الأسئلة الشائعة (FAQ)</h2>
+            <div class="faq-item">
+                <h4>كيف يمكنني شحن رصيد المحفظة؟</h4>
+                <p>يمكنك التوجه لصفحة المحفظة وإدخال كود الكارت أو التواصل معنا عبر تليجرام لشحن رصيدك فوراً.</p>
+            </div>
+            <div class="faq-item">
+                <h4>ماذا تفعل إذا توقف الفيديو عن العمل؟</h4>
+                <p>تأكد من قوة اتصال الإنترنت لديك، أو قم بتحديث الصفحة (Refresh)، وفي حال استمرار المشكلة تواصل معنا هنا.</p>
+            </div>
+            <div class="faq-item">
+                <h4>كيف أنضم للكورسات الجديدة؟</h4>
+                <p>من خلال صفحة "الكورسات المتاحة"، يمكنك اختيار الكورس والاشتراك به مباشرة برصيد محفظتك.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+        });
+        function toggleMenu(e) { e.stopPropagation(); document.getElementById("dropdownMenu").classList.toggle("show"); }
+        window.onclick = function() { document.getElementById("dropdownMenu").classList.remove('show'); }
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+        function submitSupport(event) {
+            event.preventDefault();
+            alert('تم استلام رسالتك بنجاح يا بطل! 🚀 سيتواصل معك فريق الدعم في أقرب وقت.');
+            document.getElementById('supSubject').value = '';
+            document.getElementById('supMessage').value = '';
+        }
+        function logout() { localStorage.clear(); window.location.href = "login.html"; }
+    </script>
+</body>
+</html>

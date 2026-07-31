@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - منصة أسامة</title>
+    <style>
+        :root {
+            --bg-color: #0d1117; --card-bg: #161b22; --text-color: #c9d1d9;
+            --accent-color: #ffc107; --border-color: #30363d; --hover-bg: #21262d;
+        }
+        body.light-mode {
+            --bg-color: #f6f8fa; --card-bg: #ffffff; --text-color: #24292f;
+            --border-color: #d0d7de; --hover-bg: #f3f4f6;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; margin: 0; padding-top: 90px; }
+        
+        /* النافبار الأصلية */
+        .navbar {
+            position: fixed; top: 0; right: 0; left: 0; height: 75px;
+            background-color: var(--card-bg); border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 35px; z-index: 1000;
+        }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 20px; }
+        .logo { color: #ff5722; font-weight: bold; font-size: 24px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        
+        .nav-link {
+            color: var(--text-color); text-decoration: none; font-weight: 600; font-size: 15px;
+            padding: 8px 14px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { background-color: var(--hover-bg); color: var(--accent-color); }
+        
+        .wallet-badge {
+            background: var(--hover-bg); border: 1px solid var(--border-color);
+            padding: 8px 15px; border-radius: 20px; font-weight: bold; color: var(--accent-color);
+            display: flex; align-items: center; gap: 6px; font-size: 14px;
+        }
+        .theme-toggle {
+            background: var(--hover-bg); border: 1px solid var(--border-color);
+            color: var(--text-color); width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.2s;
+        }
+        .theme-toggle:hover { border-color: var(--accent-color); transform: scale(1.05); }
+
+        .user-menu-container { position: relative; display: inline-block; }
+        .user-avatar-btn {
+            width: 42px; height: 42px; border-radius: 50%; background: var(--hover-bg);
+            border: 2px solid var(--accent-color); cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; overflow: hidden; padding: 0;
+        }
+        .user-avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .dropdown-menu {
+            display: none; position: absolute; left: 0; top: 55px;
+            background-color: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); width: 180px; overflow: hidden; z-index: 1001;
+        }
+        .dropdown-menu.show { display: block; }
+        .dropdown-item {
+            padding: 12px 16px; color: var(--text-color); text-decoration: none;
+            display: block; font-size: 14px; font-weight: 600; transition: 0.2s; border-bottom: 1px solid var(--border-color);
+        }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background-color: var(--hover-bg); color: var(--accent-color); }
+
+        /* محتوى صفحة الملف الشخصي */
+        .main-container { max-width: 650px; margin: 40px auto; padding: 0 20px; }
+        .profile-card {
+            background-color: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 35px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: center;
+        }
+        .avatar-preview {
+            width: 100px; height: 100px; border-radius: 50%; background: var(--hover-bg);
+            border: 3px solid var(--accent-color); margin: 0 auto 20px auto; display: flex;
+            align-items: center; justify-content: center; font-size: 38px; overflow: hidden;
+        }
+        .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .form-group { margin-bottom: 20px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-color); }
+        .form-control {
+            width: 100%; padding: 12px 15px; background: var(--hover-bg);
+            border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color);
+            font-size: 14px; box-sizing: border-box; outline: none; transition: 0.2s;
+        }
+        .form-control:focus { border-color: var(--accent-color); box-shadow: 0 0 8px rgba(255, 193, 7, 0.2); }
+        
+        /* خصائص الحقول غير القابلة للتعديل */
+        .form-control:disabled {
+            background-color: rgba(128, 128, 128, 0.1);
+            color: #8b949e;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .file-input { display: none; }
+        .upload-btn {
+            background: var(--hover-bg); border: 1px solid var(--border-color); color: var(--text-color);
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;
+            display: inline-block; transition: 0.2s; margin-bottom: 20px;
+        }
+        .upload-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        .save-btn {
+            background-color: var(--accent-color); color: #000; border: none;
+            padding: 14px; border-radius: 10px; font-weight: bold; font-size: 16px;
+            cursor: pointer; transition: 0.2s; width: 100%; margin-top: 10px;
+        }
+        .save-btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); }
+    </style>
+</head>
+<body>
+
+    <!-- النافبار الأصلية -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="dashboard.html" class="logo"><span>🧬</span> منصة أسامة</a>
+            <a href="dashboard.html" class="nav-link"><span>🏠</span> الرئيسية</a>
+        </div>
+        <div class="nav-right">
+            <div class="wallet-badge" id="walletBadge">💰 0 جنيه</div>
+            <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+            <div class="user-menu-container">
+                <button class="user-avatar-btn" id="navUserAvatar" onclick="toggleUserMenu()">👤</button>
+                <div class="dropdown-menu" id="userDropdown">
+                    <a href="profile.html" class="dropdown-item">👤 الملف الشخصي</a>
+                    <a href="wallet.html" class="dropdown-item">💳 شحن المحفظة</a>
+                    <a href="login.html" class="dropdown-item" style="color: #ff5722;" onclick="logout()">🚪 تسجيل الخروج</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="profile-card">
+            <!-- معاينة الصورة الشخصية -->
+            <div class="avatar-preview" id="profileAvatarPreview">👤</div>
+            
+            <label for="avatarFile" class="upload-btn">📁 اختر صورة شخصية جديدة</label>
+            <input type="file" id="avatarFile" class="file-input" accept="image/*" onchange="previewImage(event)">
+
+            <h2 style="margin-top: 10px; color: var(--accent-color); margin-bottom: 25px;">إعدادات الملف الشخصي</h2>
+
+            <form onsubmit="saveProfile(event)">
+                <!-- بيانات قابلة للتعديل -->
+                <div class="form-group">
+                    <label>الاسم الكامل (قابل للتعديل)</label>
+                    <input type="text" id="profileName" class="form-control" placeholder="أدخل اسمك" required>
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة السر الجديدة (اتركها فارغة إذا لم تقم برغبة في تغييرها)</label>
+                    <input type="password" id="profilePassword" class="form-control" placeholder="أدخل كلمة سر جديدة">
+                </div>
+
+                <!-- بيانات إنشاء الحساب (للعرض فقط - غير قابلة للتعديل) -->
+                <div class="form-group">
+                    <label>البريد الإلكتروني (ثابت - لا يمكن تعديله)</label>
+                    <input type="email" id="profileEmail" class="form-control" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>رقم الهاتف (ثابت - لا يمكن تعديله)</label>
+                    <input type="text" id="profilePhone" class="form-control" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label>السنة الدراسية / الشعبة (ثابت - لا يمكن تعديله)</label>
+                    <input type="text" id="profileGrade" class="form-control" disabled>
+                </div>
+
+                <button type="submit" class="save-btn">حفظ التعديلات المسموحة</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let base64Image = "";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggleBtn').innerText = '☀️';
+            }
+
+            // تحميل بيانات الحساب المسجلة مسبقاً
+            const name = localStorage.getItem('userName') || "أسامة";
+            const email = localStorage.getItem('userEmail') || "osama@platform.com";
+            const phone = localStorage.getItem('userPhone') || "01012345678";
+            const grade = localStorage.getItem('userGrade') || "الثانوية العامة - علمي علوم";
+            const savedAvatar = localStorage.getItem('userAvatar');
+
+            // تعبئة الحقول القابلة للتعديل
+            document.getElementById('profileName').value = name;
+            
+            // تعبئة الحقول الثابتة (للعرض فقط)
+            document.getElementById('profileEmail').value = email;
+            document.getElementById('profilePhone').value = phone;
+            document.getElementById('profileGrade').value = grade;
+
+            // عرض الصورة الشخصية المحفوظة (سواء كانت صورة مرفوعة أو افتراضية)
+            if (savedAvatar) {
+                base64Image = savedAvatar;
+                if (savedAvatar.startsWith('data:image')) {
+                    document.getElementById('profileAvatarPreview').innerHTML = `<img src="${savedAvatar}" alt="Profile">`;
+                    document.getElementById('navUserAvatar').innerHTML = `<img src="${savedAvatar}" alt="Avatar">`;
+                } else {
+                    document.getElementById('profileAvatarPreview').innerText = savedAvatar;
+                    document.getElementById('navUserAvatar').innerText = savedAvatar;
+                }
+            }
+
+            updateWalletDisplay();
+        });
+
+        // دالة لمعاينة الصورة المرفوعة وتحويلها لـ Base64 لتخزينها محلياً
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64Image = e.target.result;
+                    document.getElementById('profileAvatarPreview').innerHTML = `<img src="${base64Image}" alt="Profile">`;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateWalletDisplay() {
+            const balance = localStorage.getItem('walletBalance') || "0";
+            document.getElementById('walletBadge').innerText = `💰 ${balance} جنيه`;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeToggleBtn').innerText = isLight ? '☀️' : '🌙';
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.user-menu-container')) {
+                const dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('profileName').value.trim();
+            const newPassword = document.getElementById('profilePassword').value.trim();
+
+            // حفظ التعديلات المسموحة (الاسم والصورة وكلمة السر)
+            localStorage.setItem('userName', name);
+            if (base64Image) {
+                localStorage.setItem('userAvatar', base64Image);
+                if (base64Image.startsWith('data:image')) {
+                    document.getElementById('navUserAvatar').innerHTML = `<img src="${base64Image}" alt="Avatar">`;
+                } else {
+                    document.getElementById('navUserAvatar').innerText = base64Image;
+                }
+            }
+
+            if (newPassword.length > 0) {
+                localStorage.setItem('userPassword', newPassword);
+            }
+
+            document.getElementById('profilePassword').value = ""; // تفريغ حقل كلمة السر بعد الحفظ
+
+            alert("تم حفظ الاسم، الصورة الشخصية، وكلمة السر بنجاح يا بطل! 🚀");
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+        }
+    </script>
+</body>
+</html>
