@@ -55,5 +55,39 @@
             <p style="margin-top: 8px;"><a href="index.html">العودة للرئيسية</a></p>
         </div>
     </div>
+      <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZqUjL9mWbCDc0vVqfV9FvX0N_CjQ",
+            authDomain: "osamaahmed-5d24b.firebaseapp.com",
+            projectId: "osama-5d24b",
+            storageBucket: "osama-5d24b.appspot.com",
+            messagingSenderId: "587394968804",
+            appId: "1:587394968804:web:f56730058e0a65bbd6973_"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ربط نموذج تسجيل الدخول بعملية التحقق عبر فايربيس
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // تم تسجيل الدخول بنجاح، الانتقال للوحة التحكم
+                    window.location.href = 'dashboard.html';
+                })
+                .catch((error) => {
+                    alert("خطأ في تسجيل الدخول: " + error.message);
+                });
+        });
+    </script>
 </body>
 </html>
