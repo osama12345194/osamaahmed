@@ -39,5 +39,28 @@
             <p style="margin-top: 10px;"><a href="index.html">العودة للرئيسية</a></p>
         </div>
     </div>
+    <script>
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAWgZ_5HwoCJwhCz95YnYFWtQuVZ18_CQo",
+  authDomain: "osama-b824b.firebaseapp.com",
+  projectId: "osama-b824b",
+  storageBucket: "osama-b824b.firebasestorage.app",
+  messagingSenderId: "507303004004",
+  appId: "1:507303004004:web:f3c9149e6fcceb5602dc71",
+  measurementId: "G-763VVMTJFE"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    </script>
 </body>
 </html>
