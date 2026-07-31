@@ -2,7 +2,8 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- تم تثبيت العرض لضمان تطابق الشكل تماماً مع الكمبيوتر على الهواتف -->
+    <meta name="viewport" content="width=1024">
     <title>لوحة التحكم - منصة أسامة</title>
     <style>
         :root {
@@ -59,9 +60,7 @@
         .welcome-box h1 { margin: 0; color: var(--accent-color); font-size: 28px; }
         .welcome-box p { margin: 8px 0 0 0; color: #8b949e; font-size: 15px; }
 
-        /* شبكة لوحة التحكم الجديدة (قسم التقدم والملاحظات) */
         .top-section-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px; }
-        @media (max-width: 768px) { .top-section-grid { grid-template-columns: 1fr; } }
 
         .dash-card {
             background-color: var(--card-bg); border: 1px solid var(--border-color);
@@ -70,19 +69,15 @@
         }
         .dash-card h3 { margin-top: 0; color: var(--accent-color); display: flex; align-items: center; gap: 10px; font-size: 20px; margin-bottom: 15px; }
         
-        /* عدادات نسب التقدم المتعددة */
         .progress-item { margin-bottom: 12px; }
         .progress-item:last-child { margin-bottom: 0; }
         .progress-info { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; color: #8b949e; }
         .progress-bar-bg { background-color: var(--hover-bg); border-radius: 10px; height: 10px; width: 100%; overflow: hidden; border: 1px solid var(--border-color); }
         .progress-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
 
-        /* خانة الملاحظات الصغيرة */
         .notes-box { font-size: 14px; color: #8b949e; line-height: 1.6; background: var(--hover-bg); padding: 15px; border-radius: 10px; border: 1px dashed var(--border-color); }
 
-        /* قسم الكورسات (كورساتي والكورسات الحالية والمتاحة) */
         .courses-section-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        @media (max-width: 768px) { .courses-section-grid { grid-template-columns: 1fr; } }
 
         .course-list { list-style: none; padding: 0; margin: 0; }
         .course-item {
@@ -138,7 +133,6 @@
             <div style="font-size: 45px;">🚀</div>
         </div>
 
-        <!-- قسم عدادات نسب التقدم والملاحظات -->
         <div class="top-section-grid">
             <div class="dash-card">
                 <h3><span>📈</span> نسب التقدم الدراسية</h3>
@@ -164,7 +158,6 @@
             </div>
         </div>
 
-        <!-- قسم كورساتي والكورسات الحالية والمتاحة -->
         <div class="courses-section-grid">
             <div class="dash-card">
                 <h3><span>📚</span> كورساتي الحالية</h3>
